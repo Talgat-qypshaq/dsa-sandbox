@@ -23,13 +23,11 @@ public class Person implements Serializable, Comparable<Person>
 
   public String toString()
   {
-    System.out.println("name:"+getName()+"; age:"+getAge());
-    return "";
+    return "name: "+getName()+"; age: "+getAge();
   }
 
   public int compareTo(Person other)
   {
-    //return this.age - other.age;
     return this.getName().compareTo(other.getName());
   }
 }
