@@ -4,8 +4,8 @@ public class MergeSortClass
 {
   public static <T extends Comparable<? super T>> void mergesort(T[] theArray)
   {
-    T[] tempArray = (T[]) new Comparable<?>[theArray.length];
-    //T[] tempArray = new T[theArray.length];
+    //T[] tempArray = (T[]) new Comparable<?>[theArray.length];
+    T[] tempArray = (T[])java.lang.reflect.Array.newInstance(theArray.getClass().getComponentType(), theArray.length);
     mergesort(theArray, tempArray, 0, theArray.length-1);
   }
 
