@@ -28,27 +28,31 @@ public class Queens
 
   public void displayBoard()
   {
-    for(int column = 0; column < BOARD_SIZE; ++column)
+    for(int row = 0; row < BOARD_SIZE; ++row)
     {
-      for(int row = 0; row < BOARD_SIZE; ++row)
+      for(int column = 0; column < BOARD_SIZE; ++column)
       {
-        System.out.print(board[row][column]);
+        if(board[row][column] == EMPTY) System.out.print("  ");
+        if(board[row][column] == QUEEN) System.out.print("Q ");
+        if(board[row][column] == UNDER_ATTACK) System.out.print("• ");
       }
-      System.out.print(" ");
+      System.out.println("");
     }
+    System.out.println("");
   }
 
-  public boolean placeQueens(int column)
+  public boolean placeQueens(int column) throws Exception
   {
-    if(column > BOARD_SIZE)
+    displayBoard();
+    if(column >= BOARD_SIZE)
     {
       return true;
     }
     else
     {
       boolean queenPlaced = false;
-      int row = 1;
-      while(!queenPlaced && (row <= BOARD_SIZE))
+      int row = 0;
+      while(!queenPlaced && (row < BOARD_SIZE))
       {
         if(isUnderAttack(row, column))
         {
@@ -73,24 +77,22 @@ public class Queens
   {
     board[row][column] = QUEEN;
     //set all elements in the row and the column UNDER_ATTACK
-    for(int j = 1; j <= BOARD_SIZE; j++)
+    for(int i = row, j = column, k = 0, l = row; k < BOARD_SIZE; ++i, ++j, ++k, l--)
     {
-      if(j != column && board[row][j] != QUEEN) board[row][j] = UNDER_ATTACK;
-      if(j != row && board[j][column] != QUEEN) board[j][column] = UNDER_ATTACK;
-    }
-    //set all elements in the diagonal UNDER_ATTACK
-    int upRow = row;
-    int upColumn = column;
-    int downRow = row;
-    int downColumn = column;
-    while(upRow > 0 && downRow <= BOARD_SIZE && upColumn > 0 && downColumn <= BOARD_SIZE)
-    {
-      upRow--;
-      downRow++;
-      upColumn--;
-      downColumn--;
-      if(board[upRow][upColumn] != QUEEN) board[upRow][upColumn] = UNDER_ATTACK;
-      if(board[downRow][downColumn] != QUEEN) board[downRow][downColumn] = UNDER_ATTACK;
+      //row
+      if(k != row && board[k][column] != QUEEN) board[k][column] = UNDER_ATTACK;
+      //column
+      if(k != column && board[row][k] != QUEEN) board[row][k] = UNDER_ATTACK;
+      //diagonal from left to right
+      if(i < BOARD_SIZE && j < BOARD_SIZE && board[i][j] != QUEEN)
+      {
+        board[i][j] = UNDER_ATTACK;
+      }
+      //diagonal from right to left
+      if(i < BOARD_SIZE && l >= 0 && board[l][j] != QUEEN)
+      {
+        board[l][j] = UNDER_ATTACK;
+      }
     }
   }
 
@@ -99,9 +101,10 @@ public class Queens
     board[row][column] = EMPTY;
   }
 
-  private boolean isUnderAttack(int row, int column)
+  private boolean isUnderAttack(int row, int column) throws Exception
   {
-    return false;
+    if(board[row][column] != EMPTY) return true;
+    else return false;
   }
 
   private int index(int number)
