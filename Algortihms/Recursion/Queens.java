@@ -6,8 +6,6 @@ public class Queens
 
   public final static int QUEEN = 1;
 
-  public final static int UNDER_ATTACK = -1;
-
   private int board [][];
 
   public Queens()
@@ -34,16 +32,21 @@ public class Queens
       {
         if(board[row][column] == EMPTY) System.out.print("  ");
         if(board[row][column] == QUEEN) System.out.print("Q ");
-        if(board[row][column] == UNDER_ATTACK) System.out.print("• ");
+        if(board[row][column] < EMPTY) System.out.print("• ");
+        /*  debug variant
+        if(board[row][column] == EMPTY) System.out.print(" "+EMPTY+" ");
+        if(board[row][column] == QUEEN) System.out.print(" Q ");
+        if(board[row][column] < EMPTY) System.out.print(board[row][column]+" ");
+        */
       }
       System.out.println("");
     }
     System.out.println("");
   }
 
-  public boolean placeQueens(int column) throws Exception
+  public boolean placeQueens(int column)
   {
-    displayBoard();
+    //displayBoard();
     if(column >= BOARD_SIZE)
     {
       return true;
@@ -60,6 +63,7 @@ public class Queens
         }
         else
         {
+          //System.out.println("PLACE QUEEN "+board[row][column]+"; row = "+row+"; column = "+column+".");
           setQueen(row, column);
           queenPlaced = placeQueens(column+1);
           if(!queenPlaced)
@@ -75,36 +79,64 @@ public class Queens
 
   public void setQueen(int row, int column)
   {
+    //System.out.println("SET QUEEN "+board[row][column]+"; row = "+row+"; column = "+column+".");
     board[row][column] = QUEEN;
-    //set all elements in the row and the column UNDER_ATTACK
+    //set all elements in the row, the column and diagonal as UNDER_ATTACK (value less than EMPTY)
     for(int i = row, j = column, k = 0, l = row; k < BOARD_SIZE; ++i, ++j, ++k, l--)
     {
       //row
-      if(k != row && board[k][column] != QUEEN) board[k][column] = UNDER_ATTACK;
+      if(k != row && board[k][column] != QUEEN) board[k][column] = board[k][column] - 1;
       //column
-      if(k != column && board[row][k] != QUEEN) board[row][k] = UNDER_ATTACK;
+      if(k != column && board[row][k] != QUEEN) board[row][k] = board[row][k] - 1;
       //diagonal from left to right
       if(i < BOARD_SIZE && j < BOARD_SIZE && board[i][j] != QUEEN)
       {
-        board[i][j] = UNDER_ATTACK;
+        board[i][j] = board[i][j] - 1;
       }
       //diagonal from right to left
-      if(i < BOARD_SIZE && l >= 0 && board[l][j] != QUEEN)
+      if(j < BOARD_SIZE && l >= 0 && board[l][j] != QUEEN)
       {
-        board[l][j] = UNDER_ATTACK;
+        board[l][j] = board[l][j] - 1;
       }
     }
   }
 
   private void removeQueen(int row, int column)
   {
+    //System.out.println("REMOVED "+board[row][column]+"; row = "+row+"; column = "+column+".");
     board[row][column] = EMPTY;
+    //increment UNDER_ATTACK (value less than EMPTY) values of the row, the column and diagonal
+    for(int i = row, j = column, k = 0, l = row; k < BOARD_SIZE; ++i, ++j, ++k, l--)
+    {
+      //row
+      if(k != row && board[k][column] < EMPTY) board[k][column] = board[k][column] + 1;
+      //column
+      if(k != column && board[row][k] < EMPTY) board[row][k] = board[row][k] + 1;
+      //diagonal from left to right
+      if(i < BOARD_SIZE && j < BOARD_SIZE && board[i][j] < EMPTY)
+      {
+        board[i][j] = board[i][j] + 1;
+      }
+      //diagonal from right to left
+      if(j < BOARD_SIZE && l >= 0 && board[l][j] < EMPTY)
+      {
+        board[l][j] = board[l][j] + 1;
+      }
+    }
   }
 
-  private boolean isUnderAttack(int row, int column) throws Exception
+  private boolean isUnderAttack(int row, int column)
   {
-    if(board[row][column] != EMPTY) return true;
-    else return false;
+    if(board[row][column] != EMPTY)
+    {
+      //System.out.println("UNDER ATTACK value = "+board[row][column]+"; row = "+row+"; column = "+column+".");
+      return true;
+    }
+    else
+    {
+      //System.out.println("NOT UNDER ATTACK value = "+board[row][column]+"; row = "+row+"; column = "+column+".");
+      return false;
+    }
   }
 
   private int index(int number)
