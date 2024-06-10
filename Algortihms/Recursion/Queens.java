@@ -30,14 +30,35 @@ public class Queens
     {
       for(int column = 0; column < BOARD_SIZE; ++column)
       {
-        if(board[row][column] == EMPTY) System.out.print("  ");
-        if(board[row][column] == QUEEN) System.out.print("Q ");
+        //if(board[row][column] == EMPTY) System.out.print("  ");
+        //if(board[row][column] == QUEEN) System.out.print("Q ");
         if(board[row][column] < EMPTY) System.out.print("• ");
         /*  debug variant
         if(board[row][column] == EMPTY) System.out.print(" "+EMPTY+" ");
         if(board[row][column] == QUEEN) System.out.print(" Q ");
         if(board[row][column] < EMPTY) System.out.print(board[row][column]+" ");
         */
+        if(board[row][column] == QUEEN) System.out.print("♛ ");
+        if(board[row][column] == EMPTY)
+        {
+          if((row == 0 || row == 2 || row == 4 || row == 6) &&
+            (column == 0 || column == 2 || column == 4 || column == 6)
+            ||
+            (row == 1 || row == 3 || row == 5 || row == 7) &&
+              (column == 1 || column == 3 || column == 5 || column == 7)
+            )
+          {
+            System.out.print("⬜");
+          }
+          if((row == 0 || row == 2 || row == 4 || row == 6) &&
+            (column == 1 || column == 3 || column == 5 || column == 7)
+            ||
+            (row == 1 || row == 3 || row == 5 || row == 7) &&
+              (column == 0 || column == 2 || column == 4 || column == 6))
+          {
+            System.out.print("⬛");
+          }
+        }
       }
       System.out.println("");
     }
